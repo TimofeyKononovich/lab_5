@@ -127,23 +127,55 @@ public class MainFrame extends JFrame {
     }
 
     protected void openGraphics(File selectedFile) {
-			 try {
-				DataInputStream in = new DataInputStream(new FileInputStream(selectedFile));
-			      ArrayList graphicsData = new ArrayList(50);
-			      while (in.available() > 0) {
-			        Double x = Double.valueOf(in.readDouble());
-			        Double y = Double.valueOf(in.readDouble());
-			        graphicsData.add(new Double[] { x, y });
-			      }
-			      if (graphicsData.size() > 0) {
-			        fileLoaded = true;
-			        resetGraphicsMenuItem.setEnabled(true);
-			        display.showGraphics(graphicsData); 
-			 }
-			 }
-			 catch (FileNotFoundException | IOException e) {	
-			}
-			finally{
-				in.close();
-			}
-			}
+        try {
+            DataInputStream in = new DataInputStream(new FileInputStream(selectedFile));
+            ArrayList graphicsData = new ArrayList(50);
+            while (in.available() > 0) {
+                Double x = Double.valueOf(in.readDouble());
+                Double y = Double.valueOf(in.readDouble());
+                graphicsData.add(new Double[] { x, y });
+            }
+            if (graphicsData.size() > 0) {
+                fileLoaded = true;
+                resetGraphicsMenuItem.setEnabled(true);
+                display.showGraphics(graphicsData);
+            }
+        } catch (FileNotFoundException | IOException e) {
+        } finally {
+            in.close();
+        }
+    }
+
+    private class GraphicsMenuListener implements MenuListener {
+
+        @Override
+        public void menuCanceled(MenuEvent arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void menuDeselected(MenuEvent arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void menuSelected(MenuEvent arg0) {
+
+            // TODO Auto-generated method stub
+            showAxisMenuItem.setEnabled(fileLoaded);
+            showMarkersMenuItem.setEnabled(fileLoaded);
+            shapeRotateAntiClockItem.setEnabled(fileLoaded);
+            // shapeRotateClockItem.setEnabled(fileLoaded);
+            saveToTextMenuItem.setEnabled(fileLoaded);
+        }
+    }
+
+    public static void main(String[] args) {
+        MainFrame frame = new MainFrame();
+        frame.setDefaultCloseOperation(3);
+        frame.setVisible(true);
+
+    }
+}
