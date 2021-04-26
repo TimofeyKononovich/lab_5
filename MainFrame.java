@@ -1,3 +1,5 @@
+package lab_5;
+
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -36,7 +38,7 @@ public class MainFrame extends JFrame {
     private JFileChooser fileChooser = null;
 
     public MainFrame() {
-        super("����� ������� �������");
+        super("Lab_5");
         setSize(WIDTH, HEIGHT);
         Toolkit kit = Toolkit.getDefaultToolkit();
         setLocation((kit.getScreenSize().width - WIDTH) / 2, (kit.getScreenSize().height - HEIGHT) / 2);
@@ -44,9 +46,9 @@ public class MainFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
-        JMenu fileMenu = new JMenu("����");
+        JMenu fileMenu = new JMenu("Menu");
         menuBar.add(fileMenu);
-        Action openGraphicsAction = new AbstractAction("������� ����",
+        Action openGraphicsAction = new AbstractAction("open",
                 new ImageIcon(MainFrame.class.getResource("image/Open_files.png"))) {
 
             public void actionPerformed(ActionEvent arg0) {
@@ -61,7 +63,7 @@ public class MainFrame extends JFrame {
             }
         };
         fileMenu.add(openGraphicsAction);
-        Action saveToTextAction = new AbstractAction("��������� � .txt",
+        Action saveToTextAction = new AbstractAction("NewFile.txt",
                 new ImageIcon(MainFrame.class.getResource("image/Save.png"))) {
 
             @Override
@@ -77,10 +79,10 @@ public class MainFrame extends JFrame {
         };
         saveToTextMenuItem = fileMenu.add(saveToTextAction);
 
-        JMenu graphicsMenu = new JMenu("������");
+        JMenu graphicsMenu = new JMenu("TAB");
         menuBar.add(graphicsMenu);
 
-        Action rotatesShapeAntiClockAction = new AbstractAction("��������� �����") {
+        Action rotatesShapeAntiClockAction = new AbstractAction("rotatesShapeAntiClockAction") {
             public void actionPerformed(ActionEvent e) {
                 if (display.isAntiClockRotate()) {
                     display.setClockRotate(false);
@@ -94,7 +96,7 @@ public class MainFrame extends JFrame {
         shapeRotateAntiClockItem.setEnabled(false);
         graphicsMenu.addSeparator();
 
-        Action showAxisAction = new AbstractAction("�������� ��� ���������") {
+        Action showAxisAction = new AbstractAction("showAxisAction") {
             public void actionPerformed(ActionEvent e) {
                 display.setShowAxis(showAxisMenuItem.isSelected());
             }
@@ -103,7 +105,7 @@ public class MainFrame extends JFrame {
         graphicsMenu.add(showAxisMenuItem);
         showAxisMenuItem.setSelected(true);
 
-        Action showMarkersAction = new AbstractAction("�������� ������� �����") {
+        Action showMarkersAction = new AbstractAction("showMarkersAction") {
 
             public void actionPerformed(ActionEvent e) {
                 display.setShowMarkers(showMarkersMenuItem.isSelected());
@@ -114,7 +116,7 @@ public class MainFrame extends JFrame {
         showMarkersMenuItem.setSelected(true);
         graphicsMenu.addSeparator();
 
-        Action resetGraphicsAction = new AbstractAction("�������� ��� ���������") {
+        Action resetGraphicsAction = new AbstractAction("resetGraphicsAction") {
             public void actionPerformed(ActionEvent event) {
                 MainFrame.this.display.reset();
             }

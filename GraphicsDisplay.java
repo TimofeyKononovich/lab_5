@@ -1,3 +1,5 @@
+package lab_5;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -145,9 +147,7 @@ public class GraphicsDisplay extends JPanel {
   protected void paintGrid(Graphics2D canvas) {
     canvas.setStroke(gridStroke);
     canvas.setColor(Color.GRAY);
-    // �����
     double pos = viewport[0][0];
-    ;
     double step = (viewport[1][0] - viewport[0][0]) / 10;
 
     while (pos < viewport[1][0]) {
@@ -170,7 +170,6 @@ public class GraphicsDisplay extends JPanel {
   protected void paintGraphics(Graphics2D canvas) {
     canvas.setStroke(this.markerStroke);
     canvas.setColor(Color.RED);
-    // �����
     Double currentX = null;
     Double currentY = null;
     for (Double[] point : this.graphicsData) {
@@ -187,7 +186,6 @@ public class GraphicsDisplay extends JPanel {
   }
 
   protected void paintAxis(Graphics2D canvas) {
-    // ���
     canvas.setStroke(this.axisStroke);
     canvas.setColor(java.awt.Color.BLACK);
     canvas.setFont(this.axisFont);
@@ -230,7 +228,6 @@ public class GraphicsDisplay extends JPanel {
       else
         canvas.setColor(Color.RED);
 
-      // �������
       GeneralPath star = new GeneralPath();
       Point2D.Double center = xyToPoint(point[0], point[1]);
       star.moveTo(center.getX(), center.getY());
@@ -266,7 +263,7 @@ public class GraphicsDisplay extends JPanel {
   }
 
   protected boolean isSpecialPoint(double y) {
-    // ��������� �������� �� �������
+
     int Yint = (int) y;
     boolean flag = false;
 
@@ -288,7 +285,6 @@ public class GraphicsDisplay extends JPanel {
   }
 
   private void paintLabels(Graphics2D canvas) {
-    // ������� ��������� � �����
     canvas.setColor(Color.BLACK);
     canvas.setFont(this.labelsFont);
     FontRenderContext context = canvas.getFontRenderContext();
@@ -344,7 +340,6 @@ public class GraphicsDisplay extends JPanel {
     Color oldColor = canvas.getColor();
     Font oldFont = canvas.getFont();
     Paint oldPaint = canvas.getPaint();
-    /// �������
     if (clockRotate) {
       AffineTransform at = AffineTransform.getRotateInstance(Math.PI / 2, getSize().getWidth() / 2,
           getSize().getHeight() / 2);
@@ -388,13 +383,11 @@ public class GraphicsDisplay extends JPanel {
     canvas.draw(selectionRect);
   }
 
-  // ������������� �������� �� ������� �������
   public void setClockRotate(boolean clockRotate) {
     this.clockRotate = clockRotate;
     repaint();
   }
 
-  // ������������� �������� ����� ������� �������
   public void setAntiClockRotate(boolean antiClockRotate) {
     this.antiClockRotate = antiClockRotate;
     repaint();
