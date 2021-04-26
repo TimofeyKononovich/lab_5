@@ -186,33 +186,217 @@ public class GraphicsDisplay extends JPanel {
     }
   }
 
-  protected void paintAxis(Graphics2D canvas){
-      // ���
-      canvas.setStroke(this.axisStroke);
-      canvas.setColor(java.awt.Color.BLACK);
-      canvas.setFont(this.axisFont);
-      FontRenderContext context=canvas.getFontRenderContext();
-      if (!(viewport[0][0] > 0|| viewport[1][0] < 0)){
-        canvas.draw(new Line2D.Double(xyToPoint(0, viewport[0][1]),
-            xyToPoint(0, viewport[1][1])));
-        canvas.draw(new Line2D.Double(xyToPoint(-(viewport[1][0] - viewport[0][0]) * 0.0025,
-            viewport[0][1] - (viewport[0][1] - viewport[1][1]) * 0.015),xyToPoint(0,viewport[0][1])));
-        canvas.draw(new Line2D.Double(xyToPoint((viewport[1][0] - viewport[0][0]) * 0.0025,
-            viewport[0][1] - (viewport[0][1] - viewport[1][1]) * 0.015),
-            xyToPoint(0, viewport[0][1])));
-        Rectangle2D bounds = axisFont.getStringBounds("y",context);
-        Point2D.Double labelPos = xyToPoint(0.0, viewport[0][1]);
-        canvas.drawString("y",(float)labelPos.x + 10,(float)(labelPos.y + bounds.getHeight() / 2));
-        }
-      if (!(viewport[1][1] > 0.0D || viewport[0][1] < 0.0D)){
-        canvas.draw(new Line2D.Double(xyToPoint(viewport[0][0],0),
-            xyToPoint(viewport[1][0],0)));
-        canvas.draw(new Line2D.Double(xyToPoint(viewport[1][0] - (viewport[1][0] - viewport[0][0]) * 0,
-            (viewport[0][1] - viewport[1][1]) * 0.005), xyToPoint(viewport[1][0], 0)));
-        canvas.draw(new Line2D.Double(xyToPoint(viewport[1][0] - (viewport[1][0] - viewport[0][0]) * 0.01,
-            -(viewport[0][1] - viewport[1][1]) * 0.005), xyToPoint(viewport[1][0], 0)));
-        Rectangle2D bounds = axisFont.getStringBounds("x",context);
-        Point2D.Double labelPos = xyToPoint(this.viewport[1][0],0.0D);
-        canvas.drawString("x",(float)(labelPos.x - bounds.getWidth() - 10),(float)(labelPos.y - bounds.getHeight() / 2));
-        }
+  protected void paintAxis(Graphics2D canvas) {
+    // ���
+    canvas.setStroke(this.axisStroke);
+    canvas.setColor(java.awt.Color.BLACK);
+    canvas.setFont(this.axisFont);
+    FontRenderContext context = canvas.getFontRenderContext();
+    if (!(viewport[0][0] > 0 || viewport[1][0] < 0)) {
+      canvas.draw(new Line2D.Double(xyToPoint(0, viewport[0][1]), xyToPoint(0, viewport[1][1])));
+      canvas.draw(new Line2D.Double(xyToPoint(-(viewport[1][0] - viewport[0][0]) * 0.0025,
+          viewport[0][1] - (viewport[0][1] - viewport[1][1]) * 0.015), xyToPoint(0, viewport[0][1])));
+      canvas.draw(new Line2D.Double(xyToPoint((viewport[1][0] - viewport[0][0]) * 0.0025,
+          viewport[0][1] - (viewport[0][1] - viewport[1][1]) * 0.015), xyToPoint(0, viewport[0][1])));
+      Rectangle2D bounds = axisFont.getStringBounds("y", context);
+      Point2D.Double labelPos = xyToPoint(0.0, viewport[0][1]);
+      canvas.drawString("y", (float) labelPos.x + 10, (float) (labelPos.y + bounds.getHeight() / 2));
     }
+    if (!(viewport[1][1] > 0.0D || viewport[0][1] < 0.0D)) {
+      canvas.draw(new Line2D.Double(xyToPoint(viewport[0][0], 0), xyToPoint(viewport[1][0], 0)));
+      canvas.draw(new Line2D.Double(
+          xyToPoint(viewport[1][0] - (viewport[1][0] - viewport[0][0]) * 0, (viewport[0][1] - viewport[1][1]) * 0.005),
+          xyToPoint(viewport[1][0], 0)));
+      canvas.draw(new Line2D.Double(xyToPoint(viewport[1][0] - (viewport[1][0] - viewport[0][0]) * 0.01,
+          -(viewport[0][1] - viewport[1][1]) * 0.005), xyToPoint(viewport[1][0], 0)));
+      Rectangle2D bounds = axisFont.getStringBounds("x", context);
+      Point2D.Double labelPos = xyToPoint(this.viewport[1][0], 0.0D);
+      canvas.drawString("x", (float) (labelPos.x - bounds.getWidth() - 10),
+          (float) (labelPos.y - bounds.getHeight() / 2));
+    }
+  }
+
+  protected void paintMarkers(Graphics2D canvas) {
+    canvas.setStroke(this.markerStroke);
+    canvas.setColor(Color.RED);
+    canvas.setPaint(Color.RED);
+    GeneralPath lastMarker = null;
+    int i = -1;
+    for (Double[] point : graphicsData) {
+      i++;
+
+      if (isSpecialPoint(point[1]) == true)
+        canvas.setColor(Color.GREEN);
+      else
+        canvas.setColor(Color.RED);
+
+      // �������
+      GeneralPath star = new GeneralPath();
+      Point2D.Double center = xyToPoint(point[0], point[1]);
+      star.moveTo(center.getX(), center.getY());
+      star.lineTo(star.getCurrentPoint().getX(), star.getCurrentPoint().getY() - 5);
+      star.moveTo(star.getCurrentPoint().getX() - 3, star.getCurrentPoint().getY());
+      star.lineTo(star.getCurrentPoint().getX() + 6, star.getCurrentPoint().getY());
+      star.moveTo(center.getX(), center.getY());
+      star.lineTo(star.getCurrentPoint().getX(), star.getCurrentPoint().getY() + 5);
+      star.moveTo(star.getCurrentPoint().getX() - 3, star.getCurrentPoint().getY());
+      star.lineTo(star.getCurrentPoint().getX() + 6, star.getCurrentPoint().getY());
+      star.moveTo(center.getX(), center.getY());
+      star.lineTo(star.getCurrentPoint().getX() - 5, star.getCurrentPoint().getY());
+      star.moveTo(star.getCurrentPoint().getX(), star.getCurrentPoint().getY() - 3);
+      star.lineTo(star.getCurrentPoint().getX(), star.getCurrentPoint().getY() + 6);
+      star.moveTo(center.getX(), center.getY());
+      star.lineTo(star.getCurrentPoint().getX() + 5, star.getCurrentPoint().getY());
+      star.moveTo(star.getCurrentPoint().getX(), star.getCurrentPoint().getY() - 3);
+      star.lineTo(star.getCurrentPoint().getX(), star.getCurrentPoint().getY() + 6);
+      if (i == this.selectedMarker) {
+        lastMarker = star;
+      } else {
+        canvas.draw(star);
+        canvas.fill(star);
+      }
+    }
+
+    if (lastMarker != null) {
+      canvas.setColor(Color.BLUE);
+      canvas.setPaint(Color.BLUE);
+      canvas.draw(lastMarker);
+      canvas.fill(lastMarker);
+    }
+  }
+
+  protected boolean isSpecialPoint(double y) {
+    // ��������� �������� �� �������
+    int Yint = (int) y;
+    boolean flag = false;
+
+    for (int i = 0; i < Yint; i++) {
+      if (Yint % 2 == 0) {
+        if (Yint >= 10)
+          Yint /= 10;
+        else {
+          flag = true;
+          break;
+        }
+      } else {
+        flag = false;
+        break;
+      }
+    }
+
+    return flag;
+  }
+
+  private void paintLabels(Graphics2D canvas) {
+    // ������� ��������� � �����
+    canvas.setColor(Color.BLACK);
+    canvas.setFont(this.labelsFont);
+    FontRenderContext context = canvas.getFontRenderContext();
+    double labelYPos;
+    double labelXPos;
+    if (!(viewport[1][1] >= 0 || viewport[0][1] <= 0))
+      labelYPos = 0;
+    else
+      labelYPos = viewport[1][1];
+    if (!(viewport[0][0] >= 0 || viewport[1][0] <= 0.0D))
+      labelXPos = 0;
+    else
+      labelXPos = viewport[0][0];
+    double pos = viewport[0][0];
+    double step = (viewport[1][0] - viewport[0][0]) / 10;
+    while (pos < viewport[1][0]) {
+      java.awt.geom.Point2D.Double point = xyToPoint(pos, labelYPos);
+      String label = formatter.format(pos);
+      Rectangle2D bounds = labelsFont.getStringBounds(label, context);
+      canvas.drawString(label, (float) (point.getX() + 5), (float) (point.getY() - bounds.getHeight()));
+      pos = pos + step;
+    }
+    pos = viewport[1][1];
+    step = (viewport[0][1] - viewport[1][1]) / 10.0D;
+    while (pos < viewport[0][1]) {
+      Point2D.Double point = xyToPoint(labelXPos, pos);
+      String label = formatter.format(pos);
+      Rectangle2D bounds = labelsFont.getStringBounds(label, context);
+      canvas.drawString(label, (float) (point.getX() + 5), (float) (point.getY() - bounds.getHeight()));
+      pos = pos + step;
+    }
+    if (selectedMarker >= 0) {
+      Point2D.Double point = xyToPoint(((Double[]) graphicsData.get(selectedMarker))[0].doubleValue(),
+          ((Double[]) graphicsData.get(selectedMarker))[1].doubleValue());
+      String label = "X=" + formatter.format(((Double[]) graphicsData.get(selectedMarker))[0]) + ", Y="
+          + formatter.format(((Double[]) graphicsData.get(selectedMarker))[1]);
+      Rectangle2D bounds = labelsFont.getStringBounds(label, context);
+      canvas.setColor(Color.BLACK);
+      canvas.drawString(label, (float) (point.getX() + 5.0D), (float) (point.getY() - bounds.getHeight()));
+    }
+  }
+
+  protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+
+    scaleX = this.getSize().getWidth() / (this.viewport[1][0] - this.viewport[0][0]);
+    scaleY = this.getSize().getHeight() / (this.viewport[0][1] - this.viewport[1][1]);
+    if ((this.graphicsData == null) || (this.graphicsData.size() == 0))
+      return;
+
+    Graphics2D canvas = (Graphics2D) g;
+    Stroke oldStroke = canvas.getStroke();
+    Color oldColor = canvas.getColor();
+    Font oldFont = canvas.getFont();
+    Paint oldPaint = canvas.getPaint();
+    /// �������
+    if (clockRotate) {
+      AffineTransform at = AffineTransform.getRotateInstance(Math.PI / 2, getSize().getWidth() / 2,
+          getSize().getHeight() / 2);
+      at.concatenate(new AffineTransform(getSize().getHeight() / getSize().getWidth(), 0.0, 0.0,
+          getSize().getWidth() / getSize().getHeight(), (getSize().getWidth() - getSize().getHeight()) / 2,
+          (getSize().getHeight() - getSize().getWidth()) / 2));
+      canvas.setTransform(at);
+
+    }
+    if (antiClockRotate) {
+      AffineTransform at = AffineTransform.getRotateInstance(-Math.PI / 2, getSize().getWidth() / 2,
+          getSize().getHeight() / 2);
+      at.concatenate(new AffineTransform(getSize().getHeight() / getSize().getWidth(), 0.0, 0.0,
+          getSize().getWidth() / getSize().getHeight(), (getSize().getWidth() - getSize().getHeight()) / 2,
+          (getSize().getHeight() - getSize().getWidth()) / 2));
+      canvas.setTransform(at);
+
+    }
+    paintGrid(canvas);
+    if (showAxis) {
+      paintAxis(canvas);
+      paintLabels(canvas);
+    }
+    paintGraphics(canvas);
+    if (showMarkers)
+      paintMarkers(canvas);
+
+    paintSelection(canvas);
+    canvas.setFont(oldFont);
+    canvas.setPaint(oldPaint);
+    canvas.setColor(oldColor);
+    canvas.setStroke(oldStroke);
+
+  }
+
+  private void paintSelection(Graphics2D canvas) {
+    if (!scaleMode)
+      return;
+    canvas.setStroke(selectionStroke);
+    canvas.setColor(Color.BLACK);
+    canvas.draw(selectionRect);
+  }
+
+  // ������������� �������� �� ������� �������
+  public void setClockRotate(boolean clockRotate) {
+    this.clockRotate = clockRotate;
+    repaint();
+  }
+
+  // ������������� �������� ����� ������� �������
+  public void setAntiClockRotate(boolean antiClockRotate) {
+    this.antiClockRotate = antiClockRotate;
+    repaint();
+  }
+}
