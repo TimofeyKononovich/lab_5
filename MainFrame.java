@@ -127,8 +127,7 @@ public class MainFrame extends JFrame {
     }
 
     protected void openGraphics(File selectedFile) {
-        try {
-            DataInputStream in = new DataInputStream(new FileInputStream(selectedFile));
+        try (DataInputStream in = new DataInputStream(new FileInputStream(selectedFile))) {
             ArrayList graphicsData = new ArrayList(50);
             while (in.available() > 0) {
                 Double x = Double.valueOf(in.readDouble());
@@ -140,9 +139,7 @@ public class MainFrame extends JFrame {
                 resetGraphicsMenuItem.setEnabled(true);
                 display.showGraphics(graphicsData);
             }
-        } catch (FileNotFoundException | IOException e) {
-        } finally {
-            in.close();
+
         }
     }
 
